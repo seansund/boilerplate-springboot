@@ -1,0 +1,6 @@
+application:
+- name: @@application.name@@
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  host: xx
+  domain: xx
+  path: ./build/libs/@@application.name@@-@@version@@.jar

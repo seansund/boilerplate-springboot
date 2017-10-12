@@ -12,9 +12,10 @@ apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
+version = '0.1.0'
 jar {
     baseName = project.name
-    version =  '0.1.0'
+    version =  version
 }
 
 repositories {
@@ -50,3 +51,21 @@ test {
 apply from: "${rootProject.projectDir}/build-jacoco.gradle"
 apply from: "${rootProject.projectDir}/build-lint.gradle"
 apply from: "${rootProject.projectDir}/build-githooks.gradle"
+
+task setupManifest(type: Copy) {
+  from('templates') {
+    include "*.yml.template"
+    filter {
+      it.replaceAll("@@application.name@@", project.name)
+    }
+    filter {
+      it.replaceAll("@@version@@", version)
+    }
+    rename '(.*).template', '$1'
+  }
+  into { rootProject.rootDir }
+}
+
+build {
+  dependsOn setupManifest
+}
